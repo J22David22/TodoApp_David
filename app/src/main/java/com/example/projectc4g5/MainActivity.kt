@@ -1,14 +1,17 @@
 package com.example.projectc4g5
 
+import android.app.ActivityOptions
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import android.util.Pair as UtilPair
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +35,15 @@ class MainActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             val intento=Intent(this,LoginActivity::class.java)
-            startActivity(intento)
+
+
+            val options = ActivityOptions.makeSceneTransitionAnimation(this,
+                UtilPair.create(logoImgView, "logoImageTrans"),
+                UtilPair.create(textViewTeam9, "labelBienvenidaTrans"))
+
+
+
+            startActivity(intento, options.toBundle())
         }, 3000)
 
     }
