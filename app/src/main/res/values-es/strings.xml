@@ -20,7 +20,11 @@
     <string name="text_must_have_characters">Contraseñas deben tener caracteres especiales</string>
     <string name="text_passwords_must_match">Las contraseñas no coinciden</string>
     <string name="text_registered">fue registrado correctamente</string>
-
+    <string name="text_no_punct">Hay símbolos no permitidos</string>
+    <string name="text_signup_google">Iniciaste con Google</string>
+    <string name="text_signup_facebook"> Registrado con Facebook</string>
+    <string name="text_login_google">Ingresaste con Google</string>
+    <string name="text_login_facebook"> Ingresaste con Facebook</string>
 
 
 
@@ -57,6 +61,8 @@
     <string name="text_accept_terms">Acepto los términos de privacidad</string>
     <string name="text_register">Registrar</string>
     <string name="text_have_account">Ya tengo una cuenta</string>
+
+    <string name="text_username_register">Usuario</string>
 
 
     <!--Textos de la content_activity_home-->

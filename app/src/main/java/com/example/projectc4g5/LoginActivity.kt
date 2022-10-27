@@ -23,6 +23,9 @@ class LoginActivity : AppCompatActivity() {
     lateinit var txtInputUsuario:  TextInputEditText
     lateinit var txtInputPassword:  TextInputEditText
 
+    lateinit var image_google: ImageView
+    lateinit var image_facebook: ImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -34,6 +37,9 @@ class LoginActivity : AppCompatActivity() {
 
         txtInputUsuario = findViewById(R.id.txtInputUsuario)
         txtInputPassword = findViewById(R.id.txtInputPassword)
+
+        image_google=findViewById(R.id.image_google)
+        image_facebook=findViewById(R.id.image_facebook)
 
         labelRegistrar.setOnClickListener{
             //Toast.makeText(this,"abrir el registro", Toast.LENGTH_SHORT).show()
@@ -47,6 +53,18 @@ class LoginActivity : AppCompatActivity() {
                 Pair.create(buttonLogin, "buttonRegisTrans"))
 
             startActivity(intent, options.toBundle())
+        }
+
+        image_google.setOnClickListener{
+            val intent=Intent(this,HomeActivity::class.java)
+            startActivity(intent)
+            Toast.makeText(this,resources.getString(R.string.text_login_google), Toast.LENGTH_LONG).show()
+        }
+
+        image_facebook.setOnClickListener{
+            val intent=Intent(this,HomeActivity::class.java)
+            startActivity(intent)
+            Toast.makeText(this,resources.getString(R.string.text_login_facebook), Toast.LENGTH_LONG).show()
         }
 
         buttonLogin.setOnClickListener{

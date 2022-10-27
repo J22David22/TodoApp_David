@@ -20,6 +20,11 @@
     <string name="text_must_have_characters">Passwords must have special characters</string>
     <string name="text_passwords_must_match">Passwords does not match</string>
     <string name="text_registered">was registered successfully</string>
+    <string name="text_no_punct">Symbols not allowed</string>
+    <string name="text_login_google">Logged In with Google</string>
+    <string name="text_login_facebook">Logged In with Facebook</string>
+    <string name="text_signup_google">Signed con Google</string>
+    <string name="text_signup_facebook"> Signed con Facebook</string>
 
 
     <!--Textos de la activity_login-->
@@ -55,6 +60,10 @@
     <string name="text_accept_terms">I accept privacy terms</string>
     <string name="text_register">Sign Up</string>
     <string name="text_have_account">I already have an account</string>
+
+    <string name="text_username_register">Username</string>
+
+
 
 
     <!--Textos de la content_activity_home-->
@@ -92,5 +101,6 @@
 
     <string name="text_my_tasks">My tasks</string>
     <string name="text_about">About Us</string>
+
 
 </resources>

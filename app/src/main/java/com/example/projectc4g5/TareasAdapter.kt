@@ -1,5 +1,6 @@
 package com.example.projectc4g5
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projectc4g5.room_database.ToDo
 import com.example.projectc4g5.room_database.ToDoDatabase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -72,6 +74,7 @@ class TareasAdapter (context: AppCompatActivity,
         holder.layout.setOnClickListener{
             Toast.makeText(holder.itemView.context,textViewTask.text, Toast.LENGTH_LONG).show()
             val datos=Bundle()
+            datos.putInt("id",myTaskIds[position])
             datos.putString("task",textViewTask.text as String)
             datos.putString("time",textViewTime.text as String)
             datos.putString("place",myTaskPlaces[position])
@@ -82,7 +85,31 @@ class TareasAdapter (context: AppCompatActivity,
                 ?.addToBackStack("")
                 ?.commit()
         }
+
+        icon_delete.setOnClickListener{
+            val db=ToDoDatabase.getDatabase(HomeActivity())
+            val todoDAO=db.todoDao()
+
+            runBlocking{
+                launch {
+                    val datos=Bundle()
+                    var idpro= myTaskIds[position]
+
+                    var taskpro=myTaskTitles[position]
+                    var timepro=myTaskTimes[position]
+                    var placepro=myTaskPlaces[position]
+                    datos.putString("time",textViewTime.text as String)
+                    datos.putString("place",myTaskPlaces[position])
+                    val task= ToDo(idpro,taskpro,timepro,placepro)
+                    var result =todoDAO.deleteTask(task)
+                    val intento = Intent(holder.itemView.context, HomeActivity::class.java)
+                    context.startActivity(intento)
+
+                }
+            }
+        }
     }
+
 
     override fun getItemCount(): Int {
         return myTaskTitles.size

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projectc4g5.room_database.ToDo
 import com.example.projectc4g5.room_database.ToDoDatabase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -88,7 +89,10 @@ class HomesFragment : Fragment() {
         listRecyclerView.adapter=myAdapter
         listRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
+
         updateList()
+
+
     }
 
     fun updateList(){
