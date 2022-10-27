@@ -1,3 +1,96 @@
 <resources>
     <string name="app_name">ProjectC4G5</string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <!--  ******  VALIDATIONS AND ERROR MESAGGES   ******  -->
+
+    <string name="text_perfect">Perfect</string>
+    <string name="text_wrong">Something went wrong</string>
+    <string name="text_invalid_email">Invalid email</string>
+    <string name="text_empty_field">Empty fields not allowed</string>
+    <string name="text_wrong_password">Wrong password</string>
+    <string name="text_wrong_user">This user does not exist</string>
+    <string name="text_terms_required">It is required to accept terms</string>
+    <string name="text_only_text">Numbers and symbols Not allowed</string>
+    <string name="text_only_numbers">Only numbers are allowed</string>
+    <string name="text_password_length">Passwords must have 8+ characters</string>
+    <string name="text_must_have_numbers">Passwords must have numbers</string>
+    <string name="text_must_have_lowercase">Passwords must have lowercase letters</string>
+    <string name="text_must_have_uppercase">Passwords must have uppercase letters</string>
+    <string name="text_must_have_characters">Passwords must have special characters</string>
+    <string name="text_passwords_must_match">Passwords does not match</string>
+    <string name="text_registered">was registered successfully</string>
+
+
+    <!--Textos de la activity_login-->
+
+
+    <string name="text_welcome_login">Welcome to MinTIC</string>
+    <string name="text_email">Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_forget">Forget your password?</string>
+    <string name="text_login">LogIn</string>
+    <string name="text_want_register">I want to register!</string>
+    <string name="text_developer">Team 9</string>
+
+
+    <!--Textos de la activity_main-->
+
+
+    <string name="text_made_by">Made by</string>
+    <!--    <string name="text_developer">Team 9</string>-->
+
+
+    <!--Textos de la activity_register-->
+
+
+    <string name="text_info_register">You are one step away to join the team</string>
+    <string name="text_name">Name</string>
+    <string name="text_lastname">Lastname</string>
+    <string name="text_id_or_nit">NIT or ID number</string>
+    <!--    <string name="text_email">Email</string>-->
+    <string name="text_phone">Phone number</string>
+    <!--    <string name="text_password">Password</string>-->
+    <string name="text_password_confirm">Confirm password</string>
+    <string name="text_accept_terms">I accept privacy terms</string>
+    <string name="text_register">Sign Up</string>
+    <string name="text_have_account">I already have an account</string>
+
+
+    <!--Textos de la content_activity_home-->
+
+    <string name="text_home_bar_title">ToDo LIST</string>
+
+    <!--Textos del HomesFragment-->
+
+    <string name="text_task1">Shopping</string>
+    <string name="text_task2">Get the car fixed</string>
+    <string name="text_task3">Go to the hospital</string>
+    <string name="text_task1_time">10:00</string>
+    <string name="text_task2_time">14:30</string>
+    <string name="text_task3_time">20:00</string>
+    <string name="text_task1_place">Mall Center</string>
+    <string name="text_task2_place">Downtown</string>
+    <string name="text_task3_place">Hospital</string>
+
+
+    <!--Textos del fragment_about-->
+
+
+    <string name="text_developed_by">Developed by David</string>
+
+
+    <!--Textos del menu_home_header-->
+
+
+    <string name="text_username">David</string>
+    <string name="text_email_user">jd@email.com</string>
+
+
+    <!--Textos del menu_home-->
+
+
+    <string name="text_my_tasks">My tasks</string>
+    <string name="text_about">About Us</string>
+
 </resources>

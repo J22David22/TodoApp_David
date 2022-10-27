@@ -12,18 +12,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="2.5"
         android:orientation="horizontal"
+        android:padding="30dp"
         >
 
         <ImageView
             android:id="@+id/imageRegister"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_height="wrap_content"
             android:src="@drawable/startapp"
             android:transitionName="logoImageTrans"
-            android:layout_gravity="left"/>
+            android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/labelRegistro"
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:text="@string/text_info_register"
             android:textStyle="bold"
-            android:textSize="25sp"
+            android:textSize="70sp"
             android:textColor="@color/teal_700"
             android:transitionName="labelBienvenidaTrans"
             android:layout_gravity="center_vertical"
@@ -46,7 +47,8 @@
         android:layout_weight="6"
         android:orientation="vertical"
         android:layout_gravity="center"
-        android:gravity="center_vertical"
+        android:gravity="top"
+        android:padding="50dp"
         >
 
         <com.google.android.material.textfield.TextInputLayout
@@ -59,7 +61,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputNombres"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textSize="40sp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -67,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_lastname"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="20dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
             <com.google.android.material.textfield.TextInputEditText
@@ -75,6 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:textSize="40sp"/>
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,7 +87,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_id_or_nit"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="20dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
             <com.google.android.material.textfield.TextInputEditText
@@ -91,6 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:textSize="40sp"/>
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_email"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="20dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
             <com.google.android.material.textfield.TextInputEditText
@@ -107,6 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:textSize="40sp"/>
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,7 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_phone"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="20dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
             <com.google.android.material.textfield.TextInputEditText
@@ -123,6 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:textSize="40sp"/>
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,7 +138,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_password"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="20dp"
             app:passwordToggleEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
@@ -141,6 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:inputType="textPassword"
+                android:textSize="40sp"/>
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -149,7 +157,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_password_confirm"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="20dp"
             app:passwordToggleEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             >
@@ -159,6 +167,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:inputType="textPassword"
+                android:textSize="40sp"/>
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -168,15 +177,18 @@
             android:layout_height="wrap_content"
             android:text="@string/text_accept_terms"
             android:layout_gravity="center"
+            android:textSize="35sp"
+            android:layout_marginTop="40dp"
             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonRegistrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="50sp"
             android:text="@string/text_register"
             android:transitionName="buttonRegisTrans"
+            android:layout_marginTop="30dp"
             />
 
         <TextView
@@ -184,12 +196,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="20dp"
             android:clickable="true"
             android:focusable="true"
             android:text="@string/text_have_account"
             android:textColor="#505050"
-            android:textSize="15sp"
+            android:textSize="40sp"
             android:transitionName="labelClickable"
             />
 

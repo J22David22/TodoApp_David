@@ -85,7 +85,7 @@
         <TextView
             android:id="@+id/labelOlvidePsw"
             android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:textAlignment="textEnd"
             android:textSize="15sp"
@@ -120,7 +120,7 @@
 
         <TextView
             android:id="@+id/labelRegistrar"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"

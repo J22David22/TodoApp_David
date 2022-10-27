@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/imageLogin"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/startapp"
             android:transitionName="logoImageTrans"
@@ -35,7 +35,7 @@
             android:text="@string/text_welcome_login"
             android:textAlignment="center"
             android:textStyle="bold"
-            android:textSize="30sp"
+            android:textSize="60sp"
             android:textColor="@color/purple_500"
             android:transitionName="labelBienvenidaTrans"
             />
@@ -61,14 +61,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtInputUsuario"
-                android:textSize="20sp"
+                android:textSize="50sp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:hint="@string/text_password"
             app:passwordToggleEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -76,7 +76,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="50sp"
                 android:id="@+id/txtInputPassword"
                 android:inputType="textPassword"
                 />
@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="textEnd"
-            android:textSize="15sp"
+            android:textSize="40sp"
             android:textColor="#505050"
             android:layout_gravity="end"
             android:clickable="true"
@@ -103,8 +103,8 @@
             android:layout_marginHorizontal="10dp"
             android:padding="15dp"
             android:text="@string/text_login"
-            android:textSize="20sp"
-            android:layout_marginTop="12dp"
+            android:textSize="50sp"
+            android:layout_marginTop="60dp"
             />
 
 
@@ -116,6 +116,7 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center"
+        android:paddingBottom="100dp"
         >
 
         <TextView
@@ -129,7 +130,7 @@
             android:text="@string/text_want_register"
             android:textAlignment="center"
             android:textColor="#505050"
-            android:textSize="20sp"
+            android:textSize="50sp"
 
             android:transitionName="labelClickable"
             />
@@ -141,7 +142,7 @@
             android:layout_marginTop="30dp"
             android:text="@string/text_developer"
             android:textColor="@color/purple_500"
-            android:textSize="20sp"
+            android:textSize="50sp"
             android:textStyle="bold"
             android:layout_gravity="center"
             />

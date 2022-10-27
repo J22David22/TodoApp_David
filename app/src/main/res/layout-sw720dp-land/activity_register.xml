@@ -1,52 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="25dp"
-    tools:context=".RegisterActivity">
+    android:orientation="horizontal"
+    tools:context=".RegisterActivity"
+    >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="20dp"
         >
 
         <ImageView
             android:id="@+id/imageRegister"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:src="@drawable/startapp"
             android:transitionName="logoImageTrans"
-            android:layout_gravity="left"/>
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            />
 
         <TextView
             android:id="@+id/labelRegistro"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp"
             android:text="@string/text_info_register"
             android:textStyle="bold"
-            android:textSize="25sp"
+            android:textSize="60sp"
             android:textColor="@color/teal_700"
             android:transitionName="labelBienvenidaTrans"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingBottom="60dp"
+            android:layout_marginHorizontal="30dp"
             />
 
     </LinearLayout>
 
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_weight="5"
+        android:layout_height="match_parent"
+        >
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
         android:orientation="vertical"
         android:layout_gravity="center"
         android:gravity="center_vertical"
+        android:padding="70dp"
         >
 
         <com.google.android.material.textfield.TextInputLayout
@@ -59,7 +78,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInputNombres"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textSize="35sp"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -75,6 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:textSize="35sp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,6 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:textSize="35sp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,6 +130,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:textSize="35sp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,6 +147,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:textSize="35sp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -141,6 +166,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:inputType="textPassword"
+                android:textSize="35sp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,6 +185,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:inputType="textPassword"
+                android:textSize="35sp"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -168,15 +195,18 @@
             android:layout_height="wrap_content"
             android:text="@string/text_accept_terms"
             android:layout_gravity="center"
+            android:textSize="30sp"
+            android:layout_marginTop="20dp"
             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonRegistrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
+            android:textSize="40sp"
             android:text="@string/text_register"
             android:transitionName="buttonRegisTrans"
+            android:layout_marginTop="20dp"
             />
 
         <TextView
@@ -184,12 +214,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="20dp"
             android:clickable="true"
             android:focusable="true"
             android:text="@string/text_have_account"
             android:textColor="#505050"
-            android:textSize="15sp"
+            android:textSize="40sp"
             android:transitionName="labelClickable"
             />
 
@@ -197,5 +227,6 @@
 
     </LinearLayout>
 
+    </ScrollView>
 
 </LinearLayout>

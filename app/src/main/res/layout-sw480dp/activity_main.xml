@@ -13,14 +13,13 @@
         android:layout_marginTop="30dp"
         android:text="@string/text_made_by"
         android:textColor="@color/purple_500"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.031" />
 
     <ImageView
         android:id="@+id/logoImgView"
@@ -46,7 +45,7 @@
         android:layout_marginBottom="30dp"
         android:text="@string/text_developer"
         android:textColor="@color/purple_500"
-        android:textSize="48sp"
+        android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
