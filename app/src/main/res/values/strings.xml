@@ -70,17 +70,8 @@
 
     <string name="text_home_bar_title">ToDo LIST</string>
 
-    <!--Textos del HomesFragment-->
 
-    <string name="text_task1">Shopping</string>
-    <string name="text_task2">Get the car fixed</string>
-    <string name="text_task3">Go to the hospital</string>
-    <string name="text_task1_time">10:00</string>
-    <string name="text_task2_time">14:30</string>
-    <string name="text_task3_time">20:00</string>
-    <string name="text_task1_place">Mall Center</string>
-    <string name="text_task2_place">Downtown</string>
-    <string name="text_task3_place">Hospital</string>
+
 
 
     <!--Textos del fragment_about-->
@@ -101,6 +92,13 @@
 
     <string name="text_my_tasks">My tasks</string>
     <string name="text_about">About Us</string>
+
+    <!--Textos del nueva tarea activity-->
+
+    <string name="text_task_title">Task title</string>
+    <string name="text_task_time">Task time</string>
+    <string name="text_task_place">Task place</string>
+    <string name="text_task_save">Save</string>
 
 
 </resources>

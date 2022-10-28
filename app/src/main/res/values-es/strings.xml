@@ -69,17 +69,6 @@
 
     <string name="text_home_bar_title">MIS TAREAS</string>
 
-    <!--Textos del HomesFragment-->
-
-    <string name="text_task1">Ir de compras</string>
-    <string name="text_task2">Arreglar el carro</string>
-    <string name="text_task3">ir al hospital</string>
-    <string name="text_task1_time">10:00</string>
-    <string name="text_task2_time">14:30</string>
-    <string name="text_task3_time">20:00</string>
-    <string name="text_task1_place">Centro comercial</string>
-    <string name="text_task2_place">El centro</string>
-    <string name="text_task3_place">Hospital</string>
 
 
     <!--Textos del fragment_about-->
@@ -100,5 +89,12 @@
 
     <string name="text_my_tasks">Mis tareas</string>
     <string name="text_about">Sobre nosotros</string>
+
+    <!--Textos del nueva tarea activity-->
+
+    <string name="text_task_title">Nombre de la tarea</string>
+    <string name="text_task_time">Hora de la tarea</string>
+    <string name="text_task_place">Lugar de la tarea</string>
+    <string name="text_task_save">Guardar</string>
 
 </resources>
