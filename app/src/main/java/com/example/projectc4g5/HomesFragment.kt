@@ -9,11 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectc4g5.room_database.ToDo
 import com.example.projectc4g5.room_database.ToDoDatabase
+import com.example.projectc4g5.room_database.repository.ToDoRepository
+import com.example.projectc4g5.room_database.viewmodel.ToDoViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -25,6 +29,9 @@ class HomesFragment : Fragment() {
     private var myTaskPlaces: ArrayList<String> = ArrayList()
     private lateinit var listRecyclerView:RecyclerView
     private lateinit var myAdapter:RecyclerView.Adapter<TareasAdapter.MyViewHolder>
+
+    private lateinit var todoViewModel: ToDoViewModel
+    private lateinit var todoRepository: ToDoRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,9 +103,40 @@ class HomesFragment : Fragment() {
     }
 
     fun updateList(){
+
         val db=ToDoDatabase.getDatabase(requireActivity())
         val todoDAO=db.todoDao()
 
+        // Nuevas cosas para que funcione con firebase
+
+        val dbFirebase=FirebaseFirestore.getInstance()
+
+        todoRepository= ToDoRepository(todoDAO)
+        todoViewModel= ToDoViewModel(todoRepository)
+
+        var result = todoViewModel.getAllTasks()
+        result.invokeOnCompletion {
+            var theTasks = todoViewModel.getTheTaks()
+            if(theTasks!!.size!=0){
+                var i=0
+                myTaskTitles.clear()
+                myTaskTimes.clear()
+                myTaskPlaces.clear()
+                myTaskIds.clear()
+                while(i<theTasks!!.size) {
+                    myTaskIds.add(theTasks[i].id)
+                    myTaskTitles.add(theTasks[i].title.toString())
+                    myTaskTimes.add(theTasks[i].time.toString())
+                    myTaskPlaces.add(theTasks[i].place.toString())
+                    i++
+                }
+                myAdapter.notifyDataSetChanged()
+            }
+        }
+
+
+        /*
+        Comento esto para empezar a trabajar con firebase y no con room
         runBlocking{
             launch {
                 var result=todoDAO.getAllTasks()
@@ -116,7 +154,7 @@ class HomesFragment : Fragment() {
                 }
                 myAdapter.notifyDataSetChanged()
             }
-        }
+        }*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

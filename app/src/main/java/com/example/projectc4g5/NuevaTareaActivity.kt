@@ -14,6 +14,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.projectc4g5.room_database.ToDo
 import com.example.projectc4g5.room_database.ToDoDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -66,7 +68,10 @@ class NuevaTareaActivity : AppCompatActivity() {
 
 
         button_save_task.setOnClickListener{
+            /*
+            Crear o modificar tareas con room
             val db= ToDoDatabase.getDatabase(this)
+
             var updateOrCreate: Number
 
             val todoDAO=db.todoDao()
@@ -78,8 +83,6 @@ class NuevaTareaActivity : AppCompatActivity() {
                 updateOrCreate=1
 
             }
-
-
 
             runBlocking {
                 launch {
@@ -108,7 +111,77 @@ class NuevaTareaActivity : AppCompatActivity() {
 
 
                 }
+            }*/
+
+            // Crear o modificar tareas con Firebase
+
+            val db= ToDoDatabase.getDatabase(this)
+            val dbFirebase = FirebaseFirestore.getInstance()
+            var updateOrCreate: Number
+            val todoDAO=db.todoDao()
+
+            if (intent.getStringExtra("time").isNullOrEmpty()){
+                updateOrCreate=0
+
+            }else{
+                updateOrCreate=1
+
             }
+
+            runBlocking {
+                launch {
+                    if (updateOrCreate == 0) {
+                        val task = ToDo(
+                            0,
+                            text_task_title.text.toString(),
+                            text_task_time.text.toString(),
+                            text_task_place.text.toString()
+                        )
+                        var result = todoDAO.insertTask(task)
+                        if (result != -1L) {
+                            dbFirebase.collection("ToDo").document(result.toString()).set(
+                                hashMapOf(
+                                    "title" to text_task_title.text.toString(),
+                                    "time" to text_task_title.text.toString(),
+                                    "place" to text_task_title.text.toString()
+                                )
+                            )
+                        }
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                        Toast.makeText(this@NuevaTareaActivity, "Deberia crear", Toast.LENGTH_LONG)
+                            .show()
+                    } else {
+                        var idTarea = intent.getIntExtra("id", 0)
+                        Toast.makeText(
+                            this@NuevaTareaActivity,
+                            "id traidp" + idTarea,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        var nuwTask = text_task_title.text.toString()
+                        val task = ToDo(
+                            idTarea,
+                            text_task_title.text.toString(),
+                            text_task_time.text.toString(),
+                            text_task_place.text.toString()
+                        )
+                        var result = todoDAO.updateTask(task)
+                        Toast.makeText(
+                            this@NuevaTareaActivity,
+                            "Deberia actualizar " + nuwTask,
+                            Toast.LENGTH_LONG
+                        ).show()
+                        setResult(Activity.RESULT_OK)
+                        var intento = Intent(this@NuevaTareaActivity, HomeActivity::class.java)
+                        startActivity(intento)
+
+                    }
+
+
+                }
+
+            }
+
         }
     }
 
