@@ -1,11 +1,13 @@
 package com.example.projectc4g5
 
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,7 @@ import android.widget.Toast
 import com.example.projectc4g5.room_database.ToDo
 import com.example.projectc4g5.room_database.ToDoDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -68,9 +71,11 @@ class NuevaTareaActivity : AppCompatActivity() {
 
 
         button_save_task.setOnClickListener{
+
+            //Crear o modificar tareas con room
             /*
-            Crear o modificar tareas con room
             val db= ToDoDatabase.getDatabase(this)
+
 
             var updateOrCreate: Number
 
@@ -115,8 +120,10 @@ class NuevaTareaActivity : AppCompatActivity() {
 
             // Crear o modificar tareas con Firebase
 
+
             val db= ToDoDatabase.getDatabase(this)
-            val dbFirebase = FirebaseFirestore.getInstance()
+            //val dbFirebase = FirebaseFirestore.getInstance()
+            val dbFirebase = Firebase.firestore
             var updateOrCreate: Number
             val todoDAO=db.todoDao()
 
@@ -139,18 +146,21 @@ class NuevaTareaActivity : AppCompatActivity() {
                         )
                         var result = todoDAO.insertTask(task)
                         if (result != -1L) {
+                            Toast.makeText(this@NuevaTareaActivity, "id Long"+result, Toast.LENGTH_LONG).show()
                             dbFirebase.collection("ToDo").document(result.toString()).set(
                                 hashMapOf(
+                                    //"ids" to result.toInt(),
                                     "title" to text_task_title.text.toString(),
-                                    "time" to text_task_title.text.toString(),
-                                    "place" to text_task_title.text.toString()
+                                    "time" to text_task_time.text.toString(),
+                                    "place" to text_task_place.text.toString()
                                 )
                             )
+                            setResult(Activity.RESULT_OK)
+                            finish()
+                            Toast.makeText(this@NuevaTareaActivity, "Deberia crear", Toast.LENGTH_LONG)
+                                .show()
                         }
-                        setResult(Activity.RESULT_OK)
-                        finish()
-                        Toast.makeText(this@NuevaTareaActivity, "Deberia crear", Toast.LENGTH_LONG)
-                            .show()
+
                     } else {
                         var idTarea = intent.getIntExtra("id", 0)
                         Toast.makeText(
@@ -166,6 +176,14 @@ class NuevaTareaActivity : AppCompatActivity() {
                             text_task_place.text.toString()
                         )
                         var result = todoDAO.updateTask(task)
+                        dbFirebase.collection("ToDo").document(idTarea.toString()).set(
+                            hashMapOf(
+                                //"ids" to result.toInt(),
+                                "title" to text_task_title.text.toString(),
+                                "time" to text_task_time.text.toString(),
+                                "place" to text_task_place.text.toString()
+                            )
+                        )
                         Toast.makeText(
                             this@NuevaTareaActivity,
                             "Deberia actualizar " + nuwTask,

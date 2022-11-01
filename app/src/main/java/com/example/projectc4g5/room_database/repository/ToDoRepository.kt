@@ -13,6 +13,10 @@ class ToDoRepository (val toDoDao: ToDoDAO){
         return toDoDao.insertTask(toDo)
     }
 
+    suspend fun deleteTask(toDo: ToDo){
+        return toDoDao.deleteTask(toDo)
+    }
+
     suspend fun insertTasks(toDo: List<ToDo>?): List<Long>{
         return toDoDao.insertTasks(toDo)
     }

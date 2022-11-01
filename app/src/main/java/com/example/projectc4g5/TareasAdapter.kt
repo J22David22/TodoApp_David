@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -15,6 +16,9 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectc4g5.room_database.ToDo
 import com.example.projectc4g5.room_database.ToDoDatabase
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlin.random.Random
@@ -67,6 +71,8 @@ class TareasAdapter (context: AppCompatActivity,
             datos.putString("place",myTaskPlaces[position])
             intento.putExtras(datos)
             context.startActivity(intento)
+
+
         }
 
 
@@ -79,6 +85,7 @@ class TareasAdapter (context: AppCompatActivity,
             datos.putString("time",textViewTime.text as String)
             datos.putString("place",myTaskPlaces[position])
 
+
             context.getSupportFragmentManager()?.beginTransaction()
                 ?.setReorderingAllowed(true)
                 ?.replace(R.id.fragment_container_view_home, TareaFragment::class.java, datos,"detail")
@@ -89,12 +96,14 @@ class TareasAdapter (context: AppCompatActivity,
         icon_delete.setOnClickListener{
             val db=ToDoDatabase.getDatabase(HomeActivity())
             val todoDAO=db.todoDao()
+            val dbFirebase=Firebase.firestore
 
             runBlocking{
                 launch {
                     val datos=Bundle()
+                    //datos.putInt("id",myTaskIds[position])
                     var idpro= myTaskIds[position]
-
+                    val idicon=datos.getInt("id")
                     var taskpro=myTaskTitles[position]
                     var timepro=myTaskTimes[position]
                     var placepro=myTaskPlaces[position]
@@ -103,8 +112,14 @@ class TareasAdapter (context: AppCompatActivity,
                     val task= ToDo(idpro,taskpro,timepro,placepro)
                     var result =todoDAO.deleteTask(task)
                     val intento = Intent(holder.itemView.context, HomeActivity::class.java)
-                    context.startActivity(intento)
 
+                    Toast.makeText(context,"idpro"+idpro.toString(), Toast.LENGTH_LONG).show()
+                    dbFirebase.collection("ToDo").document(idpro.toString())
+                        .delete()
+                        .addOnSuccessListener{Toast.makeText(context,"Borrado bd", Toast.LENGTH_LONG).show()}
+                        .addOnFailureListener(){e->Toast.makeText(context,"error bd"+e, Toast.LENGTH_LONG).show()}
+
+                    context.startActivity(intento)
                 }
             }
         }

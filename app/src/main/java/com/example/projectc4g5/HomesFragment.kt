@@ -18,6 +18,8 @@ import com.example.projectc4g5.room_database.ToDoDatabase
 import com.example.projectc4g5.room_database.repository.ToDoRepository
 import com.example.projectc4g5.room_database.viewmodel.ToDoViewModel
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -109,7 +111,8 @@ class HomesFragment : Fragment() {
 
         // Nuevas cosas para que funcione con firebase
 
-        val dbFirebase=FirebaseFirestore.getInstance()
+        //val dbFirebase=FirebaseFirestore.getInstance()
+        val dbFirebase=Firebase.firestore
 
         todoRepository= ToDoRepository(todoDAO)
         todoViewModel= ToDoViewModel(todoRepository)
@@ -125,19 +128,38 @@ class HomesFragment : Fragment() {
                 myTaskIds.clear()
                 while(i<theTasks!!.size) {
                     myTaskIds.add(theTasks[i].id)
-                    myTaskTitles.add(theTasks[i].title.toString())
-                    myTaskTimes.add(theTasks[i].time.toString())
+                    myTaskTitles.add(theTasks[i].title!!)
+                    myTaskTimes.add(theTasks[i].time!!)
                     myTaskPlaces.add(theTasks[i].place.toString())
                     i++
                 }
                 myAdapter.notifyDataSetChanged()
             }
+            else{
+                var tasks = mutableListOf<ToDo>()
+                dbFirebase.collection("ToDo").get().addOnSuccessListener {
+                    var docs=it.documents
+                    if(docs.size !=0){
+                        var i=0
+                        while(i<docs.size) {
+                            myTaskIds.add(docs[i].id.toInt())
+                            myTaskTitles.add(docs[i].get("title") as String)
+                            myTaskTimes.add(docs[i].get("time") as String)
+                            myTaskPlaces.add(docs[i].get("place") as String)
+                            tasks.add(ToDo(myTaskIds[i], myTaskTitles[i], myTaskTimes[i], myTaskPlaces[i]))
+                            i++
+                        }
+                        todoViewModel.insertTasks(tasks)
+                        myAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
         }
 
 
-        /*
-        Comento esto para empezar a trabajar con firebase y no con room
-        runBlocking{
+
+        //Comento esto para empezar a trabajar con firebase y no con room
+        /*runBlocking{
             launch {
                 var result=todoDAO.getAllTasks()
                 var i=0
