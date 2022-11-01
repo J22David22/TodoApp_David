@@ -11,8 +11,16 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.example.projectc4g5.room_database.ToDo
+import com.example.projectc4g5.room_database.ToDoDatabase
+import com.example.projectc4g5.room_database.User
+import com.example.projectc4g5.room_database.UserDatabase
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.regex.Pattern
 import java.util.regex.Pattern.compile
 import android.util.Pair as UtilPair
@@ -350,6 +358,53 @@ class RegisterActivity : AppCompatActivity() {
         else{
             textInputPsw1.setError(null)
             Toast.makeText(this,email+resources.getString(R.string.text_registered),Toast.LENGTH_LONG).show()
+
+            val db= UserDatabase.getDatabase(this)
+            //val dbFirebase = FirebaseFirestore.getInstance()
+            val dbFirebase = Firebase.firestore
+
+            val userDAO=db.userDao()
+
+            runBlocking {
+                launch {
+
+                    val user = User(
+                        0,
+                        textInputUsername.text.toString(),
+                        null,
+                        null,
+                        null,
+                        textInputCorreo.text.toString(),
+                        null,
+                        textInputPsw1.text.toString()
+                    )
+                    var result = userDAO.insertUser(user)
+                    if (result != -1L) {
+                        Toast.makeText(this@RegisterActivity, "id Long user"+result, Toast.LENGTH_LONG).show()
+                        dbFirebase.collection("User").document(result.toString()).set(
+                            hashMapOf(
+                                //"ids" to result.toInt(),
+                                "username" to textInputUsername.text.toString(),
+                                "names" to null,
+                                "lastnames" to null,
+                                "idNumber" to null,
+                                "email" to textInputCorreo.text.toString(),
+                                "Phone" to null,
+                                "password" to textInputPsw1.text.toString()
+                            )
+                        )
+                        setResult(RESULT_OK)
+                        finish()
+                        Toast.makeText(this@RegisterActivity, "Deberia crear", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                    else{
+                        Toast.makeText(this@RegisterActivity, "No lo crea", Toast.LENGTH_LONG)
+                            .show()
+                    }
+
+                }
+            }
         }
 
         transitionBack()
@@ -453,5 +508,7 @@ class RegisterActivity : AppCompatActivity() {
 
         startActivity(intent, options.toBundle())
     }
+
+
 
 }
