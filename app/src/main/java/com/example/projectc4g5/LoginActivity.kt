@@ -1,9 +1,12 @@
 package com.example.projectc4g5
 
 import android.app.ActivityOptions
+import android.content.ContentValues.TAG
 import android.content.Intent
+import android.content.IntentSender
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.util.Pair
 import android.util.Patterns
 import android.widget.Button
@@ -18,8 +21,19 @@ import com.example.projectc4g5.room_database.repository.ToDoRepository
 import com.example.projectc4g5.room_database.repository.UserRepository
 import com.example.projectc4g5.room_database.viewmodel.ToDoViewModel
 import com.example.projectc4g5.room_database.viewmodel.UserViewModel
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -41,13 +55,46 @@ class LoginActivity : AppCompatActivity() {
     lateinit var image_google: ImageView
     lateinit var image_facebook: ImageView
 
+    private lateinit var auth: FirebaseAuth
+
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var userRepository: UserRepository
 
+    private lateinit var oneTapClient: SignInClient
+    private lateinit var signInRequest: BeginSignInRequest
+
+    private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
+    private var showOneTapUI = true
+
+    private val signInLauncher = registerForActivityResult(
+        FirebaseAuthUIActivityResultContract()
+    ) { res ->
+        this.onSignInResult(res)
+    }
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+
+        auth = Firebase.auth
+
+        // Choose authentication providers
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build())
+
+// Create and launch sign-in intent
+        val signInIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .build()
+        signInLauncher.launch(signInIntent)
+
+
 
         labelRegistrar = findViewById(R.id.labelRegistrar)
         labelBienvenida= findViewById(R.id.labelBienvenida)
@@ -159,6 +206,28 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
+
+
+
+    private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
+        val response = result.idpResponse
+        if (result.resultCode == RESULT_OK) {
+            // Successfully signed in
+            val user = FirebaseAuth.getInstance().currentUser
+            // ...
+        } else {
+            // Sign in failed. If response is null the user canceled the
+            // sign-in flow using the back button. Otherwise check
+            // response.getError().getErrorCode() and handle the error.
+            // ...
+        }
+    }
+
+
+
+
+
     public fun validateLogin(){
 
         var email:String = txtInputUsuario.text.toString().trim()
@@ -178,7 +247,9 @@ class LoginActivity : AppCompatActivity() {
                 txtInputPassword.setError(resources.getString(R.string.text_empty_field))
                 return
             }else{
+                signIn(email, password)
 
+                /*Con inicio de sesión manual
 
                 if (email in myUsersEmails){
                     var emailPosition=myUsersEmails.indexOf(email)
@@ -196,12 +267,56 @@ class LoginActivity : AppCompatActivity() {
 
                 }else{
                     Toast.makeText(this,resources.getString(R.string.text_wrong_user),Toast.LENGTH_SHORT).show()
-                }
+                }*/
 
             }
         }
 
 
     }
+
+
+    private fun signIn(email:String, password:String){
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    //Log.d(TAG, "signInWithEmail:success")
+                    val user = auth.currentUser
+                    updateUI(user)
+                    val intent=Intent(this,HomeActivity::class.java)
+                    startActivity(intent)
+                    Toast.makeText(this,resources.getString(R.string.text_perfect), Toast.LENGTH_LONG).show()
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                    updateUI(null)
+                }
+            }
+    }
+
+    private fun updateUI(user: FirebaseUser?) {
+
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        // Check if user is signed in (non-null) and update UI accordingly.
+        val currentUser = auth.currentUser
+        if(currentUser != null){
+            Toast.makeText(this ,"On Start: "+currentUser.email,Toast.LENGTH_LONG).show()
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun reload() {
+        TODO("Not yet implemented")
+        val intent = Intent(this, RegisterActivity::class.java)
+        startActivity(intent)
+    }
+
 
 }

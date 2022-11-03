@@ -18,5 +18,10 @@
         android:label="@string/text_about"
         tools:layout="@layout/fragment_about"
         />
+    <activity
+        android:id="@+id/gotologin_activity"
+        tools:layout="@layout/activity_login"
+        />
+
 
 </navigation>

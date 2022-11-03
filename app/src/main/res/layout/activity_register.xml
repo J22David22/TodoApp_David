@@ -255,7 +255,7 @@ tools:context=".RegisterActivity">
     android:gravity="center_vertical"
     >
 
-    <com.google.android.material.textfield.TextInputLayout
+    <!--<com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -266,7 +266,7 @@ tools:context=".RegisterActivity">
             android:id="@+id/textInputUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-    </com.google.android.material.textfield.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>-->
 
 
     <com.google.android.material.textfield.TextInputLayout
