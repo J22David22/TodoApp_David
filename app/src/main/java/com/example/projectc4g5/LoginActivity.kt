@@ -2,7 +2,9 @@ package com.example.projectc4g5
 
 import android.app.Activity
 import android.app.ActivityOptions
+import android.app.AlertDialog
 import android.content.ContentValues.TAG
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender
 import androidx.appcompat.app.AppCompatActivity
@@ -10,11 +12,14 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Pair
 import android.util.Patterns
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import com.example.projectc4g5.room_database.ToDo
 import com.example.projectc4g5.room_database.ToDoDatabase
 import com.example.projectc4g5.room_database.User
@@ -115,6 +120,8 @@ class LoginActivity : AppCompatActivity() {
         imageLogin = findViewById(R.id.imageLogin)
         buttonLogin = findViewById(R.id.buttonLogin)
 
+        val labelOlvidePsw:TextView = findViewById(R.id.labelOlvidePsw)
+
         txtInputUsuario = findViewById(R.id.txtInputUsuario)
         txtInputPassword = findViewById(R.id.txtInputPassword)
 
@@ -197,6 +204,21 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent, options.toBundle())
         }
 
+        labelOlvidePsw.setOnClickListener{
+            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+            builder.setTitle("Enviar correo de recuperación")
+            val view: View = layoutInflater.inflate(R.layout.reset_pass,null)
+            val emailsend:EditText =view.findViewById<EditText>(R.id.text_reset_pass)
+            builder.setView(view)
+
+            builder.setPositiveButton("Enviar", DialogInterface.OnClickListener { _, _ ->
+                recuperarPassword(emailsend)
+            })
+
+            builder.setNegativeButton("Cancel",DialogInterface.OnClickListener{_,_-> Toast.makeText(this,"canceld",Toast.LENGTH_LONG).show()})
+            builder.show()
+        }
+
         image_google.setOnClickListener{
             signInGoogle()
             /*val intent=Intent(this,HomeActivity::class.java)
@@ -220,6 +242,32 @@ class LoginActivity : AppCompatActivity() {
 
         }
     }
+
+    private fun recuperarPassword(emailsend: EditText) {
+        Toast.makeText(this,"entra funcion",Toast.LENGTH_SHORT).show()
+        if (emailsend.text.toString().isEmpty()){
+            Toast.makeText(this,"Sending Cancelled",Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(emailsend.text.toString()).matches()){
+            Toast.makeText(this,"Invalid Email",Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val emailAddress = emailsend.text.toString()
+
+        auth.sendPasswordResetEmail(emailAddress)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this,"email sent",Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Toast.makeText(this,"user does not exist",Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+
 
     private fun signInGoogle() {
 
