@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.NavHostFragment
@@ -35,14 +36,23 @@ class HomeActivity : AppCompatActivity() {
         val navView: NavigationView =findViewById(R.id.nav_view)
         val navHostFragment=supportFragmentManager.findFragmentById(R.id.fragment_container_view_home) as NavHostFragment
         val navController=navHostFragment.navController
+        val headerView: View = navView.getHeaderView(0)
 
-        appbarConfiguration= AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_about, R.id.nav_logout), drawerLayout)
+        appbarConfiguration= AppBarConfiguration(setOf(R.id.nav_home, R.id.nav_about), drawerLayout)
 
         setupActionBarWithNavController(navController, appbarConfiguration)
 
         navView.setupWithNavController(navController)
 
-
+        val useremail: String = auth.currentUser!!.email.toString()
+        if(useremail != null){
+            Toast.makeText(this ,"On Start:this "+ useremail,Toast.LENGTH_LONG).show()
+            useremail.indexOf("@")
+            val username=useremail.substring(0,useremail.indexOf("@"))
+            Toast.makeText(this ,"Index "+ username,Toast.LENGTH_LONG).show()
+            headerView.findViewById<TextView>(R.id.lbl_user_header).text="Welcome \n \n" + username
+            headerView.findViewById<TextView>(R.id.lbl_email_header).text=useremail
+        }
 
 
     }
