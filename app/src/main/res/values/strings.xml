@@ -99,6 +99,7 @@
     <string name="text_task_time">Task time</string>
     <string name="text_task_place">Task place</string>
     <string name="text_task_save">Save</string>
+    <string name="text_logout">Logout</string>
 
 
 </resources>

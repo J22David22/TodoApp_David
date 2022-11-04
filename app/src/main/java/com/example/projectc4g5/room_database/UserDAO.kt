@@ -8,19 +8,19 @@ import androidx.room.Query
 import androidx.room.Update
 
 @Dao
-interface ToDoDAO {
-    @Query("SELECT*FROM ToDo")
-    suspend fun getAllTasks(): List<ToDo>
+interface UserDAO {
+    @Query("SELECT*FROM User")
+    suspend fun getAllUsers(): List<User>
 
     @Insert(onConflict=OnConflictStrategy.IGNORE)
-    suspend fun insertTask(task: ToDo): Long
+    suspend fun insertUser(user: User): Long
 
     @Insert(onConflict=OnConflictStrategy.IGNORE)
-    suspend fun insertTasks(task: List<ToDo>?): List<Long>
+    suspend fun insertUsers(user: List<User>?): List<Long>
 
     @Update
-    suspend fun updateTask(task: ToDo)
+    suspend fun updateUser(user: User)
 
     @Delete
-    suspend fun deleteTask(task: ToDo)
+    suspend fun deleteUser(user: User)
 }
