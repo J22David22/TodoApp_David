@@ -64,14 +64,9 @@
     <string name="text_username_register">Username</string>
 
 
-
-
     <!--Textos de la content_activity_home-->
 
     <string name="text_home_bar_title">ToDo LIST</string>
-
-
-
 
 
     <!--Textos del fragment_about-->
@@ -100,6 +95,8 @@
     <string name="text_task_place">Task place</string>
     <string name="text_task_save">Save</string>
     <string name="text_logout">Logout</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

@@ -17,8 +17,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.projectc4g5.room_database.ToDo
 import com.example.projectc4g5.room_database.ToDoDatabase
-import com.example.projectc4g5.room_database.User
-import com.example.projectc4g5.room_database.UserDatabase
+import com.example.projectc4g5.room_database.Service
+import com.example.projectc4g5.room_database.ServiceDatabase
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient

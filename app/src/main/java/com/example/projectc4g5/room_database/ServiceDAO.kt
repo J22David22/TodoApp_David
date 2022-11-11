@@ -8,19 +8,19 @@ import androidx.room.Query
 import androidx.room.Update
 
 @Dao
-interface UserDAO {
-    @Query("SELECT*FROM User")
-    suspend fun getAllUsers(): List<User>
+interface ServiceDAO {
+    @Query("SELECT*FROM Service")
+    suspend fun getAllServices(): List<Service>
 
     @Insert(onConflict=OnConflictStrategy.IGNORE)
-    suspend fun insertUser(user: User): Long
+    suspend fun insertService(service: Service): Long
 
     @Insert(onConflict=OnConflictStrategy.IGNORE)
-    suspend fun insertUsers(user: List<User>?): List<Long>
+    suspend fun insertServices(service: List<Service>?): List<Long>
 
     @Update
-    suspend fun updateUser(user: User)
+    suspend fun updateService(service: Service)
 
     @Delete
-    suspend fun deleteUser(user: User)
+    suspend fun deleteService(service: Service)
 }

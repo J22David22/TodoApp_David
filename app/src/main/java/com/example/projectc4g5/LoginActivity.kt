@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.IntentSender
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -19,28 +18,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
-import com.example.projectc4g5.room_database.ToDo
-import com.example.projectc4g5.room_database.ToDoDatabase
-import com.example.projectc4g5.room_database.User
-import com.example.projectc4g5.room_database.UserDatabase
-import com.example.projectc4g5.room_database.repository.ToDoRepository
-import com.example.projectc4g5.room_database.repository.UserRepository
-import com.example.projectc4g5.room_database.viewmodel.ToDoViewModel
-import com.example.projectc4g5.room_database.viewmodel.UserViewModel
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.example.projectc4g5.room_database.Service
+import com.example.projectc4g5.room_database.ServiceDatabase
+import com.example.projectc4g5.room_database.repository.ServiceRepository
+import com.example.projectc4g5.room_database.viewmodel.ServiceViewModel
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
-import com.google.android.gms.auth.api.identity.Identity
-import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -70,8 +58,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
 
-    private lateinit var userViewModel: UserViewModel
-    private lateinit var userRepository: UserRepository
+    private lateinit var userViewModel: ServiceViewModel
+    private lateinit var userRepository: ServiceRepository
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var signInRequest: BeginSignInRequest
@@ -128,67 +116,11 @@ class LoginActivity : AppCompatActivity() {
         image_google=findViewById(R.id.image_google)
         image_facebook=findViewById(R.id.image_facebook)
 
-        val db= UserDatabase.getDatabase(this)
-        val userDAO=db.userDao()
 
         // Nuevas cosas para que funcione con firebase
 
         //val dbFirebase=FirebaseFirestore.getInstance()
-        val dbFirebase= Firebase.firestore
 
-        userRepository= UserRepository(userDAO)
-        userViewModel= UserViewModel(userRepository)
-        var result = userViewModel.getAllUsers()
-        result.invokeOnCompletion {
-            var theUsers = userViewModel.getTheUsers()
-            var users = mutableListOf<User>()
-
-            if(theUsers!!.size!=0){
-                var i=0
-                myUsersIds.clear()
-                myUsersUsernames.clear()
-                myUsersEmails.clear()
-                myUsersPasswords.clear()
-                while(i<theUsers!!.size) {
-                    myUsersIds.add(theUsers[i].id)
-                    myUsersUsernames.add(theUsers[i].username!!)
-                    myUsersEmails.add(theUsers[i].email!!)
-                    myUsersPasswords.add(theUsers[i].password.toString())
-                    i++
-                }
-            }
-            else{
-
-                dbFirebase.collection("User").get().addOnSuccessListener {
-                    var docs=it.documents
-                    if(docs.size !=0){
-                        var i=0
-                        while(i<docs.size) {
-                            myUsersIds.add(docs[i].id.toInt())
-                            myUsersUsernames.add(docs[i].get("username") as String)
-                            myUsersEmails.add(docs[i].get("email") as String)
-                            myUsersPasswords.add(docs[i].get("password") as String)
-                            users.add(User(myUsersIds[i],
-                                myUsersUsernames[i],
-                                null,
-                                null,
-                                null,
-                                myUsersEmails[i],
-                                null,
-                                myUsersPasswords[i]
-                            ))
-                            i++
-                        }
-
-                        userViewModel.insertUsers(users)
-                    }
-                }
-
-            }
-            Toast.makeText(this,"User: "+ myUsersEmails.getOrNull(6),Toast.LENGTH_LONG).show()
-            //Toast.makeText(this,"User: s"+theUsers[0].email.toString(),Toast.LENGTH_LONG).show()
-
-        }
 
         labelRegistrar.setOnClickListener{
             //Toast.makeText(this,"abrir el registro", Toast.LENGTH_SHORT).show()
