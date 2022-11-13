@@ -1,6 +1,9 @@
 package com.example.projectc4g5
 
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.ProgressDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +45,8 @@ class NewServiceActivity : AppCompatActivity() {
     lateinit var dataBase: FirebaseDatabase
     lateinit var dataRef: DatabaseReference
     lateinit var dataStorage: FirebaseStorage
+    lateinit var UrlService:String
+    lateinit var imagen_usuario:String
 
     lateinit var download_uri:String
 
@@ -51,7 +56,7 @@ class NewServiceActivity : AppCompatActivity() {
 
     private var storageReference = Firebase.storage
 
-    private var Gallery_code: Int = 1
+    private var Gallery_code: Int = 100
     val storage_path: String ="ServiceImage/*"
 
 
@@ -60,6 +65,7 @@ class NewServiceActivity : AppCompatActivity() {
         //binding =ActivityNewServiceBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_new_service)
 
+        imagen_usuario="false"
         storageReference=FirebaseStorage.getInstance()
 
         dataBase= FirebaseDatabase.getInstance()
@@ -69,34 +75,6 @@ class NewServiceActivity : AppCompatActivity() {
         label_upload_image=findViewById(R.id.label_upload_image)
         image_service=findViewById(R.id.image_service)
 
-
-
-
-
-        val galleryImage=registerForActivityResult(
-            ActivityResultContracts.GetContent(),
-            ActivityResultCallback{
-            image_service.setImageURI(it)
-                if (it != null) {
-                    imageUri = it
-                }
-        }
-        )
-
-
-        label_upload_image.setOnClickListener{
-
-            val intent = Intent()
-            intent.action=Intent.ACTION_GET_CONTENT
-            intent.type="image/*"
-            startActivityForResult(intent, Gallery_code)
-
-
-            //galleryImage.launch("image/*")
-
-        }
-
-
         text_service_title=findViewById(R.id.text_service_title)
         text_service_encargado=findViewById(R.id.text_service_encargado)
         text_service_precio=findViewById(R.id.text_service_precio)
@@ -105,10 +83,17 @@ class NewServiceActivity : AppCompatActivity() {
 
 
         var idService= intent.getIntExtra("id",0)
-        Toast.makeText(this,"id traidp"+idService, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"id idservice prueba "+idService, Toast.LENGTH_LONG).show()
         var service= intent.getStringExtra("nombre").toString()
         var encargado: String  = intent.getStringExtra("encargado").toString()
         var urlImagenServicio: String=intent.getStringExtra("imagen").toString()
+        var UrlService: String=intent.getStringExtra("imagen").toString()
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Androidly Alert")
+        builder.setMessage(urlImagenServicio)
+        builder.show()
+
         text_service_precio.text = intent.getStringExtra("precio").toString()
         text_service_title.text=service
         text_service_encargado.text=encargado
@@ -127,49 +112,54 @@ class NewServiceActivity : AppCompatActivity() {
         }
 
 
+        label_upload_image.setOnClickListener{
+
+            val intent = Intent()
+            intent.action=Intent.ACTION_GET_CONTENT
+            intent.type="image/*"
+            startActivityForResult(intent, Gallery_code)
+            imagen_usuario = "verdadero"
+
+        }
+
+
         button_save_service.setOnClickListener{
 
-            val db= ServiceDatabase.getDatabase(this)
-            //val dbFirebase = FirebaseFirestore.getInstance()
+            val db= ServiceDatabase.getDatabase(this@NewServiceActivity)
             val dbFirebase = Firebase.firestore
-            var updateOrCreate: Number
             val serviceDAO=db.serviceDao()
 
+            if(imagen_usuario!="verdadero"){
+                download_uri="https://firebasestorage.googleapis.com/v0/b/to-do-applicados.appspot.com/o/ServiceImage%2Fstartapp.jpg?alt=media&token=951cdaca-ca49-480a-a3fe-e0da230d28a4"
+                Toast.makeText(this, "Entra con falso", Toast.LENGTH_SHORT).show()
+            }
+
+
+            var updateOrCreate:Number
             if (intent.getStringExtra("precio").isNullOrEmpty()){
                 updateOrCreate=0
                 Toast.makeText(this@NewServiceActivity, "entro en crear", Toast.LENGTH_LONG).show()
 
-            }else{
-                updateOrCreate=1
-                Toast.makeText(this@NewServiceActivity, "entro en actualizar", Toast.LENGTH_LONG).show()
-            }
+                var ruta_imagen: String = storage_path
+                var storeRef:StorageReference =storageReference.reference.child(ruta_imagen)
+                storeRef.putFile(imageUri).addOnSuccessListener { task ->
+                    task.storage.downloadUrl.addOnSuccessListener {
+                        download_uri = it.toString()
 
-            runBlocking {
-                launch {
-                    if (updateOrCreate == 0) {
+                        runBlocking {
+                            launch {
 
+                                val service = Service(
+                                    0,
+                                    text_service_title.text.toString(),
+                                    text_service_encargado.text.toString(),
+                                    text_service_precio.text.toString(),
+                                    download_uri
+                                )
+                                var result = serviceDAO.insertService(service)
 
-                        val service = Service(
-                            0,
-                            text_service_title.text.toString(),
-                            text_service_encargado.text.toString(),
-                            text_service_precio.text.toString(),
-                            download_uri
-                        )
-                        var result = serviceDAO.insertService(service)
-                        if (result != -1L) {
-                            //subirImagen()
-                            idd=result.toString()
-                            var ruta_imagen: String = storage_path+""+idd
-                            var storeRef:StorageReference =storageReference.reference.child(ruta_imagen)
-                            storeRef.putFile(imageUri).addOnSuccessListener {task ->
-                                task.storage.downloadUrl.addOnSuccessListener {
-                                    download_uri = it.toString()
-
-
-
-                                    /*val imageMap = hashMapOf<String, String>()
-                                    imageMap.put("photo",download_uri)*/
+                                if (result != -1L) {
+                                    idd = result.toString()
                                     dbFirebase.collection("Services").document(idd).set(
                                         hashMapOf(
                                             //"ids" to result.toInt(),
@@ -179,81 +169,186 @@ class NewServiceActivity : AppCompatActivity() {
                                             "imagen" to download_uri
                                         )
                                     )
+                                    //}
+                                    //}
+                                    // *** CODIGO NUEVO PARA SUBIR IMAGENES AL REALTIME DATABASE
+
+                                    /*var filepath:StorageReference = dataStorage.getReference().child("imagePost").child(imageUri.lastPathSegment.toString()
+                                    )
+                                    filepath.putFile(imageUri).addOnSuccessListener {task ->
+                                        Toast.makeText(this@NewServiceActivity, task.toString(), Toast.LENGTH_LONG)
+                                        task.storage.downloadUrl.addOnCompleteListener {task ->
+
+
+                                            var newPost: DatabaseReference = dataRef.push()
+
+                                            newPost.child("nombre").setValue(text_service_title.text.toString())
+                                            newPost.child("encargado").setValue(text_service_encargado.text.toString())
+                                            newPost.child("precio").setValue(text_service_precio.text.toString())
+                                            newPost.child("imagen").setValue(download_uri)
+                                        }
+
+                                    }*/
+
+                                    // *** FINAL FINAL CODIGO NUEVO PARA SUBIR IMAGENES AL REALTIME DATABASE *****
+                                    imagen_usuario = "false"
+                                    setResult(Activity.RESULT_OK)
+                                    finish()
                                 }
                             }
-                            /*dbFirebase.collection("Services").document(result.toString()).set(
-                                hashMapOf(
-                                    //"ids" to result.toInt(),
-                                    "nombre" to text_service_title.text.toString(),
-                                    "encargado" to text_service_encargado.text.toString(),
-                                    "precio" to text_service_precio.text.toString(),
-                                    "imagen" to "url imagen 1"
+                        }
+                    }
+                }
+
+            }else{
+                updateOrCreate=1
+                Toast.makeText(this@NewServiceActivity, "entro en actualizar", Toast.LENGTH_LONG).show()
+
+                var ruta_imagen: String = storage_path
+                var storeRef:StorageReference =storageReference.reference.child(ruta_imagen)
+                storeRef.putFile(imageUri).addOnSuccessListener { task ->
+                    task.storage.downloadUrl.addOnSuccessListener {
+                        download_uri = it.toString()
+
+                        runBlocking {
+                            launch {
+                                idService = intent.getIntExtra("id", 0)
+                                if(imagen_usuario!="verdadero"){
+                                    download_uri = intent.getStringExtra("imagen").toString()
+                                }
+                                Toast.makeText(
+                                    this@NewServiceActivity,
+                                    "id traido editar" + idService,
+                                    Toast.LENGTH_SHORT
+
+                                ).show()
+                                Toast.makeText(
+                                    this@NewServiceActivity,
+                                    "url traido editar: " + download_uri,
+                                    Toast.LENGTH_LONG
+
+                                ).show()
+                                val serviceupd = Service(
+                                    idService,
+                                    text_service_title.text.toString(),
+                                    text_service_encargado.text.toString(),
+                                    text_service_precio.text.toString(),
+                                    download_uri
                                 )
-                            )*/
+                                var result = serviceDAO.updateService(serviceupd)
+                                dbFirebase.collection("Services").document(idService.toString()).set(
+                                    hashMapOf(
+                                        //"ids" to result.toInt(),
+                                        "nombre" to text_service_title.text.toString(),
+                                        "encargado" to text_service_encargado.text.toString(),
+                                        "precio" to text_service_precio.text.toString(),
+                                        "imagen" to download_uri
+                                    )
+                                )
+                                Toast.makeText(
+                                    this@NewServiceActivity,
+                                    "Deberia actualizar ",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                imagen_usuario="false"
+                                setResult(Activity.RESULT_OK)
+                                finish()
+                            }
+                        }
+                    }
+                }
+
+            }
 
 
-                            val dbprueba = dbFirebase.collection("Services").document(result.toString()).id
-                            val imageMap = mapOf(
-                                "url" to imageUri
-                            )
-                          //  storageReference.getReference("Images").child(System.currentTimeMillis().toString())
-                          //      .putFile(imageUri)
-                                /*.addOnSuccessListener { task ->
-                                    task.metadata!!.reference!!.downloadUrl
-                                        .addOnSuccessListener {
-                                            val databaseReference=FirebaseDatabase.getInstance().getReference("userImages")
-                                            databaseReference.child(dbprueba).setValue(imageMap)
-                                                .addOnSuccessListener {
-                                                    Toast.makeText(this@NewServiceActivity,"Succesful",Toast.LENGTH_SHORT).show()
-                                                }
-                                        }
-                                }*/
 
+            /*if (intent.getStringExtra("precio").isNullOrEmpty()){
+                updateOrCreate=0
+                Toast.makeText(this@NewServiceActivity, "entro en crear", Toast.LENGTH_LONG).show()
 
-                            // *** CODIGO NUEVO PARA SUBIR IMAGENES Y OBTENER URL
+            }else{
+                updateOrCreate=1
+                Toast.makeText(this@NewServiceActivity, "entro en actualizar", Toast.LENGTH_LONG).show()
 
-                            var filepath:StorageReference = dataStorage.getReference().child("imagePost").child(imageUri.lastPathSegment.toString()
+            }
+
+            runBlocking {
+                launch {
+                    if (updateOrCreate == 0) {
+
+                        val service = Service(
+                            0,
+                            text_service_title.text.toString(),
+                            text_service_encargado.text.toString(),
+                            text_service_precio.text.toString(),
+                            download_uri
+                        )
+                        var result = serviceDAO.insertService(service)
+
+                        if (result != -1L) {
+                            idd=result.toString()
+                                    dbFirebase.collection("Services").document(idd).set(
+                                        hashMapOf(
+                                            //"ids" to result.toInt(),
+                                            "nombre" to text_service_title.text.toString(),
+                                            "encargado" to text_service_encargado.text.toString(),
+                                            "precio" to text_service_precio.text.toString(),
+                                            "imagen" to download_uri
+                                        )
+                                    )
+                                //}
+                            //}
+                            // *** CODIGO NUEVO PARA SUBIR IMAGENES AL REALTIME DATABASE
+
+                            *//*var filepath:StorageReference = dataStorage.getReference().child("imagePost").child(imageUri.lastPathSegment.toString()
                             )
                             filepath.putFile(imageUri).addOnSuccessListener {task ->
                                 Toast.makeText(this@NewServiceActivity, task.toString(), Toast.LENGTH_LONG)
                                 task.storage.downloadUrl.addOnCompleteListener {task ->
 
-                                    var ta: String = task.result.toString()
 
                                     var newPost: DatabaseReference = dataRef.push()
 
                                     newPost.child("nombre").setValue(text_service_title.text.toString())
                                     newPost.child("encargado").setValue(text_service_encargado.text.toString())
                                     newPost.child("precio").setValue(text_service_precio.text.toString())
-                                    newPost.child("imagen").setValue(task.result.toString())
+                                    newPost.child("imagen").setValue(download_uri)
                                 }
 
-                            }
+                            }*//*
 
+                            // *** FINAL FINAL CODIGO NUEVO PARA SUBIR IMAGENES AL REALTIME DATABASE *****
+                            imagen_usuario="falso"
+                            setResult(Activity.RESULT_OK)
 
-
-                            setResult(RESULT_OK)
                             finish()
-                            Toast.makeText(this@NewServiceActivity, "Deberia crear", Toast.LENGTH_LONG)
-                                .show()
                         }
 
                     } else {
-                        var idService = intent.getIntExtra("id", 0)
+
+                        idService = intent.getIntExtra("id", 0)
+                        download_uri = intent.getStringExtra("imagen").toString()
+
                         Toast.makeText(
                             this@NewServiceActivity,
-                            "id traidp" + idService,
+                            "id traido editar" + idService,
                             Toast.LENGTH_SHORT
+
                         ).show()
-                        var newService = text_service_title.text.toString()
-                        val service = Service(
+                        Toast.makeText(
+                            this@NewServiceActivity,
+                            "url traido editar: " + download_uri,
+                            Toast.LENGTH_LONG
+
+                        ).show()
+                        val serviceupd = Service(
                             idService,
                             text_service_title.text.toString(),
                             text_service_encargado.text.toString(),
                             text_service_precio.text.toString(),
                             download_uri
                         )
-                        var result = serviceDAO.updateService(service)
+                        var result = serviceDAO.updateService(serviceupd)
                         dbFirebase.collection("Services").document(idService.toString()).set(
                             hashMapOf(
                                 //"ids" to result.toInt(),
@@ -265,24 +360,17 @@ class NewServiceActivity : AppCompatActivity() {
                         )
                         Toast.makeText(
                             this@NewServiceActivity,
-                            "Deberia actualizar " + newService,
+                            "Deberia actualizar ",
                             Toast.LENGTH_LONG
                         ).show()
-                        setResult(RESULT_OK)
-                        /*var intento = Intent(this@NewServiceActivity, HomeActivity::class.java)
-                        startActivity(intento)*/
-                        getSupportFragmentManager()?.beginTransaction()
-                            ?.setReorderingAllowed(true)
-                            ?.replace(R.id.fragment_container_view_home, TareaFragment::class.java, null,"detail")
-                            ?.addToBackStack("")
-                            ?.commit()
+                        setResult(Activity.RESULT_OK)
+                        imagen_usuario="falso"
+                        var intento = Intent(this@NewServiceActivity, HomeActivity::class.java)
+                        startActivity(intento)
 
                     }
-
-
                 }
-
-            }
+            }*/
 
         }
 
@@ -295,22 +383,12 @@ class NewServiceActivity : AppCompatActivity() {
 
             imageUri=data?.data!!
 
-
             image_service.setImageURI(imageUri)
 
+            var idService = intent.getIntExtra("id", 0).toString()
 
-            var ruta_imagen: String = storage_path
-            var storeRef:StorageReference =storageReference.reference.child(ruta_imagen)
-            storeRef.putFile(imageUri).addOnSuccessListener {task ->
-
-                task.storage.downloadUrl.addOnSuccessListener {
-                    download_uri = it.toString()
-                    Toast.makeText(this,"Success "+download_uri,Toast.LENGTH_LONG).show()
-                }}
-            //subirImagen()
         }
     }
-
 
 
 }

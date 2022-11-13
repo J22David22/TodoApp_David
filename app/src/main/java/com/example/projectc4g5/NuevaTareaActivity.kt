@@ -122,7 +122,6 @@ class NuevaTareaActivity : AppCompatActivity() {
 
 
             val db= ToDoDatabase.getDatabase(this)
-            //val dbFirebase = FirebaseFirestore.getInstance()
             val dbFirebase = Firebase.firestore
             var updateOrCreate: Number
             val todoDAO=db.todoDao()

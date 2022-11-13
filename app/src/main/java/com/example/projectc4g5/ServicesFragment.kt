@@ -79,6 +79,8 @@ class ServicesFragment : Fragment() {
             startActivityForResult(intent, requestCode)
         }
 
+        updateList2()
+
         var info: Bundle= Bundle()
 
         info.putIntegerArrayList("ids", myServiceIds)
@@ -94,7 +96,7 @@ class ServicesFragment : Fragment() {
         listRecyclerView.adapter=myAdapter
         listRecyclerView.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
-        updateList2()
+
     }
 
     fun updateList2() {
@@ -120,20 +122,28 @@ class ServicesFragment : Fragment() {
                 myServiceEncargado.clear()
                 myServicePrecio.clear()
                 myServiceImagenes.clear()
-                while(i<theServices!!.size) {
-                    myServiceIds.add(theServices[i].id)
-                    myServiceTitles.add(theServices[i].nombre!!)
-                    myServiceEncargado.add(theServices[i].encargado!!)
-                    myServicePrecio.add(theServices[i].precio.toString())
-                    myServiceImagenes.add(theServices[i].imagen!!
-                    )
-                    i++
-                }
-                myAdapter.notifyDataSetChanged()
-            }
-            else{
+
                 var services = mutableListOf<Service>()
-                dbFirebase.collection("Service").get().addOnSuccessListener {
+                dbFirebase.collection("Services").get().addOnSuccessListener {
+                    var docs=it.documents
+                    if(docs.size !=0){
+                        var i=0
+                        while(i<docs.size) {
+                            myServiceIds.add(docs[i].id.toInt())
+                            myServiceTitles.add(docs[i].get("nombre") as String)
+                            myServiceEncargado.add(docs[i].get("encargado") as String)
+                            myServicePrecio.add(docs[i].get("precio") as String)
+                            myServiceImagenes.add(docs[i].get("imagen") as String)
+                            services.add(Service(myServiceIds[i], myServiceTitles[i], myServiceEncargado[i], myServicePrecio[i], myServiceImagenes[i]))
+                            i++
+                        }
+                        serviceViewModel.insertServices(services)
+                        myAdapter.notifyDataSetChanged()
+                    }
+                }
+            }else{
+                var services = mutableListOf<Service>()
+                dbFirebase.collection("Services").get().addOnSuccessListener {
                     var docs=it.documents
                     if(docs.size !=0){
                         var i=0

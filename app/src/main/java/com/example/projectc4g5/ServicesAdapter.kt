@@ -1,6 +1,7 @@
 package com.example.projectc4g5
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -61,12 +62,14 @@ class ServicesAdapter (context: AppCompatActivity,
 
 
         var imag_recycler_Service=holder.layout.findViewById<ImageView>(R.id.icon_card_view_serv)
-        var urlImageRecycler=myServicesImagenes[position]
+        var urlImageRecycler:String=myServicesImagenes[position]
 
-        if(urlImageRecycler!!.contains("firebase")){
+        /*if(urlImageRecycler!!.contains("firebase")){
             Picasso.get().load(urlImageRecycler).fit()
                 .into(imag_recycler_Service)
-        }
+        }*/
+        Picasso.get().load(urlImageRecycler).fit()
+            .into(imag_recycler_Service)
 
 
 
@@ -77,14 +80,18 @@ class ServicesAdapter (context: AppCompatActivity,
         textViewEncargado.text=myServicesEncargados[position]
 
         icon_edit_service.setOnClickListener{
+
             val intento = Intent(holder.itemView.context, NewServiceActivity::class.java)
             val datos=Bundle()
             datos.putInt("id",myServicesId[position])
-            datos.putString("nombre",textViewService.text as String)
-            datos.putString("encargado",textViewEncargado.text as String)
+            datos.putString("nombre",myServicesTitles[position])
+            datos.putString("encargado",myServicesEncargados[position])
             datos.putString("precio",myServicesPrecios[position])
             datos.putString("imagen",myServicesImagenes[position])
+
             intento.putExtras(datos)
+
+            Toast.makeText(context,"imagencita"+myServicesImagenes[position],Toast.LENGTH_LONG).show()
             context.startActivity(intento)
 
 
@@ -97,14 +104,14 @@ class ServicesAdapter (context: AppCompatActivity,
             Toast.makeText(holder.itemView.context,myServicesPrecios[position]+myServicesImagenes[position], Toast.LENGTH_LONG).show()
             val datos=Bundle()
             datos.putInt("id",myServicesId[position])
-            datos.putString("nombre",textViewService.text as String)
-            datos.putString("encargado",textViewEncargado.text as String)
+            datos.putString("nombre",myServicesTitles[position])
+            datos.putString("encargado",myServicesEncargados[position])
             datos.putString("precio",myServicesPrecios[position])
             datos.putString("imagen",myServicesImagenes[position])
 
             context.getSupportFragmentManager()?.beginTransaction()
                 ?.setReorderingAllowed(true)
-                ?.replace(R.id.fragment_container_view_home, ServiceFragment::class.java, datos,"detail")
+                ?.replace(R.id.fragment_container_view_home, ServiceFragment::class.java, datos,"detail_services")
                 ?.addToBackStack("")
                 ?.commit()
         }
